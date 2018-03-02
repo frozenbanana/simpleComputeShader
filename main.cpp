@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <iostream>
 
+#include "Shader.hpp"
+
 // TODO Make hello triangle
 int main() {
 
