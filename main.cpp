@@ -7,8 +7,15 @@
 
 #include "Shader.hpp"
 
+// shadow mapping
+const char* f_vs = "first_vs.glsl";
+const char* f_fs = "first_fs.glsl";
+
 // TODO Make hello triangle
 int main() {
+
+  //----------------------------------------------------------------------------
+
   // GLFW
   glfwInit();
   if(!glfwInit()) {
@@ -43,6 +50,8 @@ int main() {
   std::cout << "Version: " << version << std::endl;
   std::cout << "GLEW version: " << glewGetString(GLEW_VERSION) << std::endl;
 
+  //----------------------------------------------------------------------------
+
   // Hello triangle
   float trianglePoints[] = {
     -1.0f, -1.0f, 0.0f,
@@ -65,6 +74,13 @@ int main() {
   // Tell GL how to read buffer
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+  //----------------------------------------------------------------------------
+
+  Shader firstShader(f_vs, f_fs);
+  glUseProgram(firstShader.GetProgram());
+
+  //----------------------------------------------------------------------------
 
   // MAIN LOOP
   do {
