@@ -44,23 +44,28 @@ int main() {
   std::cout << "GLEW version: " << glewGetString(GLEW_VERSION) << std::endl;
 
   // Hello triangle
-  GLuint vao;
-  glGenVertexArrays(1, &vao);
-  glBindVertexArray(vao);
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-
-  static const GLfloat trianglePoints[] = {
+  float trianglePoints[] = {
     -1.0f, -1.0f, 0.0f,
     1.0f, -1.0f, 0.0f,
     0.0f, 1.0f, 0.0f,
   };
 
-  // Give triangle to openGL
-  GLuint vbo;
+  // Generate vao and vbo
+  GLuint vao, vbo;
+  glGenVertexArrays(1, &vao);
   glGenBuffers(1, &vbo);
+
+  // Bind them
+  glBindVertexArray(vao);
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
+
+  // Tell GL how to handle buffer
   glBufferData(GL_ARRAY_BUFFER, sizeof(trianglePoints), &trianglePoints, GL_STATIC_DRAW);
+
+  // Tell GL how to read buffer
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
   // MAIN LOOP
   do {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
