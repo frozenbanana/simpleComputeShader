@@ -106,3 +106,15 @@ Shader::~Shader() {
 GLuint Shader::GetProgram(){
   return this->m_program;
 }
+
+GLint Shader::GetUniform(std::string uniform_name) {
+  //Function general;
+
+  GLint uniLoc = glGetUniformLocation(this->m_program, uniform_name.c_str());
+  if(uniLoc == (GLint)-1) {
+    //If it does not, write out an error
+    std::cout << "ERROR::SHADER::" << uniform_name << "::UNIFORM_NOT_FOUND" << std::endl;
+  }
+
+  return uniLoc;
+}

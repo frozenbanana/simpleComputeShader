@@ -1,12 +1,12 @@
 #version 450
 
 layout(location = 0) in vec3 in_pos;
-layout(location = 1) in vec3 in_col;
+layout(location = 1) in vec2 in_uvs;
 
-out vec3 v_col;
+out vec2 v_uvs;
 
 void main() {
   gl_Position = vec4(in_pos, 1.0);
 
-  v_col = in_col;
+  v_uvs = in_uvs;
 }

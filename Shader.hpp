@@ -1,6 +1,6 @@
 #ifndef SHADER_H
 #define SHADER_H
-//#include <iostream>
+#include <iostream>
 //#include <vector>
 #include <GL/glew.h>
 
@@ -22,6 +22,7 @@ public:
   ~Shader();
 
   GLuint GetProgram();
+  GLint GetUniform(std::string uniform_name);
 
 };
 #endif  //SHADER_H
