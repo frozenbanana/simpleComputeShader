@@ -11,7 +11,6 @@
 const char* f_vs = "first_vs.glsl";
 const char* f_fs = "first_fs.glsl";
 
-// TODO Make hello triangle
 int main() {
 
   //----------------------------------------------------------------------------
