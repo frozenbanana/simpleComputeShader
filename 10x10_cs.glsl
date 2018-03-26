@@ -90,4 +90,3 @@ void main() {
 
   imageStore(texture_target0, txlPos, result);			//Save color in target texture
 }
-

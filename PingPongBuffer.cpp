@@ -5,7 +5,7 @@
 //Private
 void PingPongBuffer::createBuffer(GLuint buffer_id) {
   //Bind2DTextureTo(buffer_id, COMPUTE_TEX);
-  glBindTexture(GL_TEXTURE_2D, buffer_id);
+  //glBindTexture(GL_TEXTURE_2D, buffer_id);
 	glTexImage2D(
 		GL_TEXTURE_2D,
 		0,				          //Mipmaps
@@ -53,15 +53,17 @@ void PingPongBuffer::bindAndCompute(GLuint source_buffer, GLuint target_buffer) 
 }
 
 //Public
-PingPongBuffer::PingPongBuffer(int texture_width, int texture_height, GLint xy_uniform_id) {
+PingPongBuffer::PingPongBuffer(int texture_width, int texture_height) {//, GLint xy_uniform_id) {
   this->m_texture_width = texture_width;
   this->m_texture_height = texture_height;
 
-  this->m_xy_uniLoc = xy_uniform_id;
+  //this->m_xy_uniLoc = xy_uniform_id;
 
   glGenTextures(2, this->m_buffers);
 
+  glBindTexture(GL_TEXTURE_2D, this->m_buffers[0]);
   this->createBuffer(this->m_buffers[0]);
+  glBindTexture(GL_TEXTURE_2D, this->m_buffers[1]);
   this->createBuffer(this->m_buffers[1]);
 }
 
@@ -79,14 +81,14 @@ void PingPongBuffer::DoPingPong(int n_passes, GLuint src_buffer) {
   //Do a first pass if there are supposed to be passes at all
   if(n_passes > 0){
 
-    glUniform2i(this->m_xy_uniLoc, y, x);		                                    //Update uniform vector
+    //glUniform2i(this->m_xy_uniLoc, y, x);		                                    //Update uniform vector
 
     this->bindAndCompute(src_buffer, this->m_buffers[1]);
   }
 
   for (int i = 1; i < n; i++) {								                                  //Loop starts at 1 as the first pass has been done
 
-    glUniform2i(this->m_xy_uniLoc, x, y);		                                    //Update uniform vector
+    //glUniform2i(this->m_xy_uniLoc, x, y);		                                    //Update uniform vector
 
     this->bindAndCompute(this->m_buffers[x], this->m_buffers[y]);	              //Send in alternating buffers
 
@@ -99,14 +101,14 @@ void PingPongBuffer::DoPingPong(int n_passes, GLuint src_buffer) {
 }
 
 void PingPongBuffer::BindResult() {
-  //Bind2DTextureTo(this->m_buffers[0], COMP_TEX);
-  glBindImageTexture(
-    COMP_TEX,        //Slot 1
-    this->m_buffers[0],
-    0,
-    GL_FALSE,
-    0,
-    GL_READ_WRITE,			  //Only read from this texture
-    GL_RGBA8						//GL_RGB16F
-  );
+  Bind2DTextureTo(this->m_buffers[0], COMP_TEX);
+  //glBindImageTexture(
+  //  COMP_TEX,        //Slot 1
+  //  this->m_buffers[0],
+  //  0,
+  //  GL_FALSE,
+  //  0,
+  //  GL_READ_WRITE,			  //Only read from this texture
+  //  GL_RGBA8						//GL_RGB16F
+  //);
 }

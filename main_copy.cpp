@@ -13,7 +13,6 @@ const char* f_fs = "first_fs.glsl";
 
 const char* a_cs = "2x1D_cs.glsl";
 const char* b_cs = "10x10_cs.glsl";
-const char* c_cs = "PT_cs.glsl";
 
 const char* s_vs = "second_vs.glsl";
 const char* s_fs = "second_fs.glsl";
@@ -45,19 +44,13 @@ int main() {
     return 0;
   }
 
-  //printOpenGLError(); //NO ERROR
-
   glfwMakeContextCurrent(window);
   glewExperimental = GL_TRUE;
-
-  //printOpenGLError(); //NO ERROR
-
   if (glewInit() != GLEW_OK) {
     std::cout << "ERROR: Failed to initialize GLEW" << std::endl;
     return 0;
   }
-
-  printOpenGLError(); //INVALID ENUMERANT
+  //Error: Invalid Enum (Last and potentially only relevant error from search)
 
   // get version info
   const GLubyte* renderer = glGetString(GL_RENDERER); // get renderer string
@@ -66,95 +59,32 @@ int main() {
   std::cout << "Version: " << version << std::endl;
   std::cout << "GLEW version: " << glewGetString(GLEW_VERSION) << std::endl;
 
-
-  printOpenGLError(); //NO ERROR
   //----------------------------------------------------------------------------
 
   //Generate vao and vbo for triangle...
   GLuint t_vao, t_vbo;
   CreateTri(&t_vao, &t_vbo);
-
-  printOpenGLError(); //NO ERROR
-
   //... and for quad
   GLuint q_vao, q_vbo;
   CreateQuad(&q_vao, &q_vbo);
 
-  printOpenGLError(); //NO ERROR
   //----------------------------------------------------------------------------
 
   GBuffer gBuffer;
 
-  printOpenGLError(); //NO ERROR
-
   Shader firstShader(f_vs, f_fs);
   Shader secondShader(s_vs, s_fs);
-  Shader computeShader(c_cs);
-
-  printOpenGLError(); //NO ERROR
+  Shader computeShader(a_cs);
 
   //WIP: Adding either of the lines below black screens us
 
   //GLint xy_uni = computeShader.GetUniform("xORy");
-
-  printOpenGLError(); //NO ERROR
-
-  //PingPongBuffer ppBuffer(WINDOW_WIDTH, WINDOW_HEIGHT);//, xy_uni);
-
-  //############################################################################
-
-  GLuint pp_buffers[2];
-
-  glGenTextures(2, pp_buffers);
-
-  //this->createBuffer(this->m_buffers[0]);
-  glBindTexture(GL_TEXTURE_2D, pp_buffers[0]);
-  glTexImage2D(
-    GL_TEXTURE_2D,
-    0,				          //Mipmaps
-    GL_RGBA,		        //Internal format		//GL_RGB16F
-    WINDOW_WIDTH,
-    WINDOW_HEIGHT,
-    0,				          //Frontier stuff
-    GL_RGBA,		        //Format read			//GL_RGB
-    GL_UNSIGNED_BYTE,		//Type of values in read format		//GL_FLOAT
-    NULL			          //source
-  );
-
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);		//When shrunk go blurry
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);		//When enlarged go blurry
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);	//Set wrapping to clamp to edge
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);	//Set wrapping to clamp to edge
-
-  //this->createBuffer(this->m_buffers[1]);
-  glBindTexture(GL_TEXTURE_2D, pp_buffers[1]);
-  glTexImage2D(
-    GL_TEXTURE_2D,
-    0,				          //Mipmaps
-    GL_RGBA,		        //Internal format		//GL_RGB16F
-    WINDOW_WIDTH,
-    WINDOW_HEIGHT,
-    0,				          //Frontier stuff
-    GL_RGBA,		        //Format read			//GL_RGB
-    GL_UNSIGNED_BYTE,		//Type of values in read format		//GL_FLOAT
-    NULL			          //source
-  );
-
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);		//When shrunk go blurry
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);		//When enlarged go blurry
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);	//Set wrapping to clamp to edge
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);	//Set wrapping to clamp to edge
-
-  //############################################################################
-
-  //printOpenGLError(); //TBA
+  //PingPongBuffer ppBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, xy_uni);
 
   //Lgt pass setup
   glUseProgram(secondShader.GetProgram());
   gBuffer.FindUniformSamplerLoc(secondShader.GetProgram());
   gBuffer.UploadUniformSamplers();    //NTS: Move to loop?
-
-  printOpenGLError(); //NO ERROR
 
   //----------------------------------------------------------------------------
 
@@ -175,15 +105,10 @@ int main() {
     //Clear screen
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    //COMPUTE PASS--------------------------------------------------------------
-
-    //ppBuffer.DoPingPong(1, gBuffer.GetColTextureId());
-
     //LGT PASS------------------------------------------------------------------
     glUseProgram(secondShader.GetProgram());
     //Bind texture
     gBuffer.PrepLightPass();
-    //ppBuffer.BindResult();
     //Draw
     Render(&q_vao, 4);
 
@@ -210,29 +135,19 @@ void CreateTri(GLuint* vao_ptr, GLuint* vbo_ptr) {
   glGenVertexArrays(1, vao_ptr);
   glGenBuffers(1, vao_ptr);
 
-  printOpenGLError(); //NO ERROR
-
   // Bind them
   glBindVertexArray(*vao_ptr);
   glBindBuffer(GL_ARRAY_BUFFER, *vbo_ptr);
 
-  printOpenGLError(); //INVALID OPERATION
-
   // Tell GL how to handle buffer
   glBufferData(GL_ARRAY_BUFFER, sizeof(trianglePoints), &trianglePoints, GL_STATIC_DRAW);
-
-  printOpenGLError(); //INVALID OPERATION
 
   // Tell GL how to read buffer
   glEnableVertexAttribArray(0);
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 
-  printOpenGLError(); //NO ERROR
-
   glEnableVertexAttribArray(1);
   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-
-  printOpenGLError(); //INVALID OPERATION
 }
 
 void CreateQuad(GLuint* vao_ptr, GLuint* vbo_ptr) {

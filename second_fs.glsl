@@ -6,6 +6,12 @@ out vec4 out_col;
 
 layout (binding=0) uniform sampler2D gColour;
 
+layout (binding=1) uniform sampler2D gComputed;
+
 void main() {
   out_col = vec4( texture(gColour, v_uvs).rgb , 1.0f);
+
+  if (v_uvs.x > 0.5) {
+    out_col = vec4( texture(gComputed, v_uvs).rgb , 1.0f);
+  }
 }
