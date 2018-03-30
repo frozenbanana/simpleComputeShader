@@ -154,10 +154,11 @@ int main() {
   //glUseProgram(computeShader.GetProgram());
   //GLint xy_uni = computeShader.GetUniform("xORy");
 
-  printOpenGLError(); //INVALID OPERATION (Black screens us
+  printOpenGLError(); //INVALID OPERATION (Black screens us)
 
   //Lgt pass setup
   glUseProgram(secondShader.GetProgram());
+  secondShader.GetUniform("mama");
   gBuffer.FindUniformSamplerLoc(secondShader.GetProgram());
   gBuffer.UploadUniformSamplers();    //NTS: Move to loop?
 
@@ -310,7 +311,7 @@ void DoPingPong(int n_passes, GLuint src_buffer, GLuint buffer_arr[2]) {
   //Do a first pass if there are supposed to be passes at all
   if(n_passes > 0){
 
-    //glUniform2i(this->m_xy_uniLoc, y, x);		                                    //Update uniform vector
+    //glUniform2i(xy_uniLoc, y, x);		                                    //Update uniform vector
 
     BindAndCompute(src_buffer, buffer_arr[1]);
   }
@@ -319,7 +320,7 @@ void DoPingPong(int n_passes, GLuint src_buffer, GLuint buffer_arr[2]) {
 
   for (int i = 1; i < n; i++) {								                                  //Loop starts at 1 as the first pass has been done
 
-    //glUniform2i(this->m_xy_uniLoc, x, y);		                                    //Update uniform vector
+    //glUniform2i(xy_uniLoc, x, y);		                                    //Update uniform vector
 
     BindAndCompute(buffer_arr[x], buffer_arr[y]);	              //Send in alternating buffers
 

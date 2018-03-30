@@ -112,18 +112,18 @@ GLuint Shader::GetProgram(){
 GLint Shader::GetUniform(std::string uniform_name) {
   //Function general;
 
-  //printOpenGLError(); //NO ERROR
+  printOpenGLError(); //NO ERROR //ALT: If this is done on the compute shader it gets an INVALID OPERATION HERE
 
   GLint uniLoc = glGetUniformLocation(this->m_program, uniform_name.c_str());
 
-  //printOpenGLError(); //NO ERROR
+  printOpenGLError(); //NO ERROR
 
   if(uniLoc == (GLint)-1) {
     //If it does not, write out an error
     std::cout << "ERROR::SHADER::" << uniform_name << "::UNIFORM_NOT_FOUND" << std::endl;
   }
 
-  //printOpenGLError(); // NO ERROR
+  printOpenGLError(); // NO ERROR
 
   return uniLoc;
 }
