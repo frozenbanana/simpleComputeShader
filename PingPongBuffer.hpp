@@ -10,12 +10,12 @@ private:
   int m_texture_width;
   int m_texture_height;
 
-  //GLint m_xy_uniLoc;
+  GLint m_xy_uniLoc;
 
   void createBuffer(GLuint buffer_id);
   void bindAndCompute(GLuint source_buffer, GLuint target_buffer);
 public:
-  PingPongBuffer(int texture_width, int texture_height);//, GLint xy_uniform_id);
+  PingPongBuffer(int texture_width, int texture_height, GLint xy_uniform_id);
   ~PingPongBuffer();
 
   void DoPingPong(int n_passes, GLuint src_buffer);

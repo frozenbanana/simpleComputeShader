@@ -7,7 +7,7 @@
 
 #include <GL/glew.h>
 
-#include <stdio.h>
+//#include <stdio.h>
 
 enum TextureEnums {
   GBUF_TEX,        //0
@@ -28,22 +28,22 @@ inline void Bind2DTextureTo(GLuint texture_id, TextureEnums target_unit) {
 //
 //Source: http://www.lighthouse3d.com/cg-topics/error-tracking-in-opengl/
 
-#define printOpenGLError() printOglError(__FILE__, __LINE__)
-
-inline int printOglError(char *file, int line)
-{
-
-    GLenum glErr;
-    int    retCode = 0;
-
-    glErr = glGetError();
-    if (glErr != GL_NO_ERROR)
-    {
-        printf("glError in file %s @ line %d: %s\n",
-			     file, line, gluErrorString(glErr));
-        retCode = 1;
-    }
-    return retCode;
-}
+// #define printOpenGLError() printOglError(__FILE__, __LINE__)
+//
+// inline int printOglError(char *file, int line)
+// {
+//
+//     GLenum glErr;
+//     int    retCode = 0;
+//
+//     glErr = glGetError();
+//     if (glErr != GL_NO_ERROR)
+//     {
+//         printf("glError in file %s @ line %d: %s\n",
+// 			     file, line, gluErrorString(glErr));
+//         retCode = 1;
+//     }
+//     return retCode;
+// }
 
 #endif

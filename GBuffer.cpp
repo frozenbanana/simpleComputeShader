@@ -52,7 +52,6 @@ GBuffer::GBuffer() {
 
   //Create and attach texture for colour
   glGenTextures(1, &(this->m_gColour));
-  //this->CreateTexture(this->m_gColour, GL_RGB16F, GL_RGB, GL_FLOAT);
   this->CreateTexture(this->m_gColour, GL_RGBA, GL_RGBA, GL_UNSIGNED_BYTE);
   this->AttachTexture(this->m_gColour, GL_COLOR_ATTACHMENT0);
 

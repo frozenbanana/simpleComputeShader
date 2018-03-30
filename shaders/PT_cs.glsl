@@ -13,8 +13,7 @@ void main() {
   vec4 result = imageLoad(texture_source0, txlPos);
 
   barrier();
-
-  result = vec4(1.0, 0.0, 0.0, 1.0);
+  result += vec4(0.02, 1.0, 0.0, 1.0);
 
   imageStore(texture_target0, txlPos, result);			//Save color in target texture
 }

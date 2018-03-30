@@ -1,4 +1,4 @@
-#version 450
+#version 440
 #extension GL_ARB_compute_shader : enable
 #extension GL_ARB_shader_image_load_store : enable
 
@@ -69,3 +69,4 @@ void main() {
 
   imageStore(texture_target0, txlPos, result);			//Save color in target texture
 }
+
