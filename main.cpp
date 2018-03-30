@@ -8,6 +8,7 @@
 #include "PingPongBuffer.hpp"
 #include "Shader.hpp"
 #include "Triangle.hpp"
+#include "Quad.hpp"
 
 const char* f_vs = "shaders/first_vs.glsl";
 const char* f_fs = "shaders/first_fs.glsl";
@@ -65,8 +66,9 @@ int main() {
   // CreateTri(&t_vao, &t_vbo);
   //... and for quad
   Triangle triangle;
-  GLuint q_vao, q_vbo;
-  CreateQuad(&q_vao, &q_vbo);
+  Quad quad;
+  // GLuint q_vao, q_vbo;
+  // CreateQuad(&q_vao, &q_vbo);
   // printOpenGLError();
   //----------------------------------------------------------------------------
 
@@ -114,8 +116,7 @@ int main() {
     gBuffer.PrepLightPass();
     ppBuffer.BindResult();
     //Draw
-    Render(&q_vao, 4);
-
+    quad.Render();
     //Window update-------------------------------------------------------------
     // Swap buffers
     glfwSwapBuffers(window);
@@ -125,73 +126,4 @@ int main() {
 
   //glDisableVertexAttribArray(0);  //NTS: ?
   return 0;
-}
-
-// void CreateTri(GLuint* vao_ptr, GLuint* vbo_ptr) {
-//   // Hello triangle
-//   float trianglePoints[] = {
-//     -1.0f, -1.0f, 0.0f,   0.3f, 1.0f, 0.9f,
-//      1.0f, -1.0f, 0.0f,   0.6f, 1.0f, 0.6f,
-//      0.0f,  1.0f, 0.0f,   0.9f, 1.0f, 0.3f
-//   };
-//
-//
-//   glGenVertexArrays(1, vao_ptr);
-//   glGenBuffers(1, vao_ptr);
-//
-//   // Bind them
-//   glBindVertexArray(*vao_ptr);
-//   glBindBuffer(GL_ARRAY_BUFFER, *vbo_ptr);
-//
-//   // Tell GL how to handle buffer
-//   glBufferData(GL_ARRAY_BUFFER, sizeof(trianglePoints), &trianglePoints, GL_STATIC_DRAW);
-//
-//   // Tell GL how to read buffer
-//   glEnableVertexAttribArray(0);
-//   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-//
-//   glEnableVertexAttribArray(1);
-//   glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-// }
-
-void CreateQuad(GLuint* vao_ptr, GLuint* vbo_ptr) {
-  //Create four vertices covering the window
-  float quad[] = {
-    //Pos                 //UVs
-    -1.0f,  1.0f, 0.0f,   0.0f, 1.0f,
-    -1.0f, -1.0f, 0.0f,   0.0f, 0.0f,
-     1.0f,  1.0f, 0.0f,   1.0f, 1.0f,
-     1.0f, -1.0f, 0.0f,   1.0f, 0.0f
-  };
-
-  //Generate arrays and buffers
-  glGenVertexArrays(1, vao_ptr);
-  glGenBuffers(1, vbo_ptr);
-
-  //Bind them together
-  glBindVertexArray(*vao_ptr);
-  glBindBuffer(GL_ARRAY_BUFFER, *vbo_ptr);
-
-  //Tell GL how to handle the buffer
-  glBufferData(GL_ARRAY_BUFFER, sizeof(quad), &quad, GL_STATIC_DRAW);
-
-  //Tell GL how to read buffer
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(
-    0,                  //Index of the attribute
-    3,                  //Number of components for the attribute
-    GL_FLOAT,           //Type of values in attribute
-    GL_FALSE,           //Are they normalized?
-    5 * sizeof(float),  //In the array, how long steps should be taken for each element?
-    (void*)0          //Inside the element, how big is the offset to the relevant values?
-  );
-
-  glEnableVertexAttribArray(1);
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-}
-
-void Render(GLuint* vao_ptr, int n_vertices) {
-  glBindVertexArray(*vao_ptr);     //Bind the quad
-  glDrawArrays(GL_TRIANGLE_STRIP, 0, n_vertices);  //Draw the stuff
-  glBindVertexArray(0);                   //Unbind the quad
 }
