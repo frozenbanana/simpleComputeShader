@@ -47,7 +47,8 @@ void PingPongBuffer::bindAndCompute(GLuint source_buffer, GLuint target_buffer) 
     GL_RGBA8 //GL_RGBA32F						//GL_RGB16F
   );
 
-  glDispatchCompute(this->m_texture_width / 10, this->m_texture_height / 10, 1);
+  // How many workgroups in x, y, z
+  glDispatchCompute(1, this->m_texture_height, 1);
 
   glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
 }

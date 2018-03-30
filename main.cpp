@@ -14,13 +14,13 @@ const char* f_vs = "shaders/first_vs.glsl";
 const char* f_fs = "shaders/first_fs.glsl";
 const char* a_cs = "shaders/2x1D_cs.glsl";      // broken
 const char* b_cs = "shaders/10x10_cs.glsl";     // broken
-const char* c_cs = "shaders/PT_cs.glsl";    // makes red color. it works
+const char* c_cs = "shaders/PT_cs.glsl";        // makes red color. it works
+const char* d_cs = "shaders/frozen_cs.glsl";    // experimental
 const char* s_vs = "shaders/second_vs.glsl";
 const char* s_fs = "shaders/second_fs.glsl";
 
-void CreateTri(GLuint* vao_ptr, GLuint* vbo_ptr);
-void CreateQuad(GLuint* vao_ptr, GLuint* vbo_ptr);
-void Render(GLuint* vao_ptr, int n_vertices);
+
+#define NR_OF_COMPUTE_PASSES 25
 
 int main() {
 
@@ -60,23 +60,15 @@ int main() {
   std::cout << "GLEW version: " << glewGetString(GLEW_VERSION) << std::endl;
 
   //----------------------------------------------------------------------------
-
-  //Generate vao and vbo for triangle...
-  // GLuint t_vao, t_vbo;
-  // CreateTri(&t_vao, &t_vbo);
-  //... and for quad
   Triangle triangle;
   Quad quad;
-  // GLuint q_vao, q_vbo;
-  // CreateQuad(&q_vao, &q_vbo);
-  // printOpenGLError();
   //----------------------------------------------------------------------------
 
   GBuffer gBuffer;
 
   Shader firstShader(f_vs, f_fs);
   Shader secondShader(s_vs, s_fs);
-  Shader computeShader(a_cs);
+  Shader computeShader(d_cs);
 
   //WIP: Adding either of the lines below black screens us
   GLint xy_uni = computeShader.GetUniform("xORy");
@@ -108,7 +100,7 @@ int main() {
 
     //COMPUTE PASS--------------------------------------------------------------
     glUseProgram(computeShader.GetProgram());
-    ppBuffer.DoPingPong(1, gBuffer.GetColTextureId());
+    ppBuffer.DoPingPong(NR_OF_COMPUTE_PASSES, gBuffer.GetColTextureId());
 
     //LGT PASS------------------------------------------------------------------
     glUseProgram(secondShader.GetProgram());
