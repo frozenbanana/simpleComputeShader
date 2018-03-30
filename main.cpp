@@ -113,12 +113,12 @@ int main() {
   glTexImage2D(
     GL_TEXTURE_2D,
     0,				          //Mipmaps
-    GL_RGBA,		        //Internal format		//GL_RGB16F
+    GL_RGBA,		        //Internal format
     WINDOW_WIDTH,
     WINDOW_HEIGHT,
     0,				          //Frontier stuff
-    GL_RGBA,		        //Format read			//GL_RGB
-    GL_UNSIGNED_BYTE,		//Type of values in read format		//GL_FLOAT
+    GL_RGBA,		        //Format read
+    GL_UNSIGNED_BYTE,		//Type of values in read format
     NULL			          //source
   );
 
@@ -132,12 +132,12 @@ int main() {
   glTexImage2D(
     GL_TEXTURE_2D,
     0,				          //Mipmaps
-    GL_RGBA,		        //Internal format		//GL_RGB16F
+    GL_RGBA,		        //Internal format
     WINDOW_WIDTH,
     WINDOW_HEIGHT,
     0,				          //Frontier stuff
-    GL_RGBA,		        //Format read			//GL_RGB
-    GL_UNSIGNED_BYTE,		//Type of values in read format		//GL_FLOAT
+    GL_RGBA,		        //Format read
+    GL_UNSIGNED_BYTE,		//Type of values in read format
     NULL			          //source
   );
 
