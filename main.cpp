@@ -99,11 +99,7 @@ int main() {
   //printOpenGLError(); //NO ERROR
 
   //WIP: Adding either of the lines below black screens us
-
   //GLint xy_uni = computeShader.GetUniform("xORy");
-
-  //printOpenGLError(); //NO ERROR
-
   //PingPongBuffer ppBuffer(WINDOW_WIDTH, WINDOW_HEIGHT);//, xy_uni);
 
   //############################################################################
@@ -154,6 +150,12 @@ int main() {
 
   //printOpenGLError(); //NO ERROR
 
+  //compute pass setup
+  //glUseProgram(computeShader.GetProgram());
+  //GLint xy_uni = computeShader.GetUniform("xORy");
+
+  printOpenGLError(); //INVALID OPERATION (Black screens us
+
   //Lgt pass setup
   glUseProgram(secondShader.GetProgram());
   gBuffer.FindUniformSamplerLoc(secondShader.GetProgram());
@@ -183,9 +185,9 @@ int main() {
     //printOpenGLError(); //NO ERROR
 
     //COMPUTE PASS--------------------------------------------------------------
-//    glUseProgram(computeShader.GetProgram());
+    glUseProgram(computeShader.GetProgram());
     //ppBuffer.DoPingPong(1, gBuffer.GetColTextureId());
-//    DoPingPong(1, gBuffer.GetColTextureId(), pp_buffers);
+    DoPingPong(1, gBuffer.GetColTextureId(), pp_buffers);
 
     //printOpenGLError(); //NO ERROR (INVALID OPERATION caught internally : FIXED: now actually calls glUseProgram on the compute shader)
 
@@ -194,7 +196,7 @@ int main() {
     //Bind texture
     gBuffer.PrepLightPass();
     //ppBuffer.BindResult();
-//    Bind2DTextureTo(pp_buffers[0], COMP_TEX);
+    Bind2DTextureTo(pp_buffers[0], COMP_TEX);
     //Draw
     Render(&q_vao, 4);
 

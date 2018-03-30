@@ -13,7 +13,7 @@ void main() {
 
   //out_col = vec4(v_uvs, 0.0f, 1.0f);
 
-  //if (v_uvs.x > 0.5) {
-  //  out_col = vec4( texture(gComputed, v_uvs).rgb , 1.0f);
-  //}
+  if (v_uvs.x > 0.5) {
+    out_col = vec4( texture(gComputed, v_uvs).rgb , 1.0f);
+  }
 }

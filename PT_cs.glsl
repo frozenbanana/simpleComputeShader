@@ -14,5 +14,7 @@ void main() {
 
   barrier();
 
+  result = vec4(1.0, 0.0, 0.0, 1.0);
+
   imageStore(texture_target0, txlPos, result);			//Save color in target texture
 }
