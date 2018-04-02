@@ -15,12 +15,13 @@ const char* f_fs = "shaders/first_fs.glsl";
 const char* a_cs = "shaders/2x1D_cs.glsl";      // broken
 const char* b_cs = "shaders/10x10_cs.glsl";     // broken
 const char* c_cs = "shaders/PT_cs.glsl";        // makes red color. it works
-const char* d_cs = "shaders/frozen_cs.glsl";    // experimental
+const char* d_cs = "shaders/frozen_cs_x.glsl";    // experimental
+const char* e_cs = "shaders/frozen_cs_y.glsl";    // experimental
 const char* s_vs = "shaders/second_vs.glsl";
 const char* s_fs = "shaders/second_fs.glsl";
 
 
-#define NR_OF_COMPUTE_PASSES 25
+#define NR_OF_COMPUTE_PASSES 1
 
 int main() {
 
@@ -68,11 +69,11 @@ int main() {
 
   Shader firstShader(f_vs, f_fs);
   Shader secondShader(s_vs, s_fs);
-  Shader computeShader(d_cs);
+  Shader computeShader_x(d_cs);
+  Shader computeShader_y(e_cs);
 
   //WIP: Adding either of the lines below black screens us
-  GLint xy_uni = computeShader.GetUniform("xORy");
-  PingPongBuffer ppBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, xy_uni);
+  PingPongBuffer ppBuffer(WINDOW_WIDTH, WINDOW_HEIGHT, &computeShader_x, &computeShader_y);
 
   //Lgt pass setup
   glUseProgram(secondShader.GetProgram());
@@ -99,7 +100,6 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     //COMPUTE PASS--------------------------------------------------------------
-    glUseProgram(computeShader.GetProgram());
     ppBuffer.DoPingPong(NR_OF_COMPUTE_PASSES, gBuffer.GetColTextureId());
 
     //LGT PASS------------------------------------------------------------------

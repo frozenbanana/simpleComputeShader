@@ -26,7 +26,7 @@ void PingPongBuffer::createBuffer(GLuint buffer_id) {
   //glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void PingPongBuffer::bindAndCompute(GLuint source_buffer, GLuint target_buffer) {
+void PingPongBuffer::bindAndCompute(GLuint source_buffer, GLuint target_buffer, GLuint x, GLuint y) {
   glBindImageTexture(
     0,                  //Always bind to slot 0
     source_buffer,
@@ -48,17 +48,18 @@ void PingPongBuffer::bindAndCompute(GLuint source_buffer, GLuint target_buffer) 
   );
 
   // How many workgroups in x, y, z
-  glDispatchCompute(1, this->m_texture_height, 1);
+  glDispatchCompute((this->m_texture_width * x + y), (this->m_texture_height * y + x), 1);
 
   glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
 }
 
 //Public
-PingPongBuffer::PingPongBuffer(int texture_width, int texture_height, GLint xy_uniform_id) {
+PingPongBuffer::PingPongBuffer(int texture_width, int texture_height, Shader* computeShaderPtr_x, Shader* computeShaderPtr_y) {
   this->m_texture_width = texture_width;
   this->m_texture_height = texture_height;
 
-  this->m_xy_uniLoc = xy_uniform_id;
+  this->m_computeShaderPtrs[0] = computeShaderPtr_x;
+  this->m_computeShaderPtrs[1] = computeShaderPtr_y;
 
   glGenTextures(2, this->m_buffers);
 
@@ -80,16 +81,16 @@ void PingPongBuffer::DoPingPong(int n_passes, GLuint src_buffer) {
   //Do a first pass if there are supposed to be passes at all
   if(n_passes > 0){
 
-    glUniform2i(this->m_xy_uniLoc, y, x);		                                    //Update uniform vector
+    glUseProgram(this->m_computeShaderPtrs[0]->GetProgram());
 
-    this->bindAndCompute(src_buffer, this->m_buffers[1]);
+    this->bindAndCompute(src_buffer, this->m_buffers[1], x, y);
   }
 
   for (int i = 1; i < n; i++) {								                                  //Loop starts at 1 as the first pass has been done
 
-    glUniform2i(this->m_xy_uniLoc, x, y);		                                    //Update uniform vector
+    glUseProgram(this->m_computeShaderPtrs[x]->GetProgram());                    //alternate between horizontal and vertical blurring
 
-    this->bindAndCompute(this->m_buffers[x], this->m_buffers[y]);	              //Send in alternating buffers
+    this->bindAndCompute(this->m_buffers[x], this->m_buffers[y], y, x);	              //Send in alternating buffers
 
     //Swap so x = 0 or 1
     //and y = 1 or 0
