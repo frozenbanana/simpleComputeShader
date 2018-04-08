@@ -79,18 +79,23 @@ void PingPongBuffer::DoPingPong(int n_passes, GLuint src_buffer) {
   int y = 0;
 
   //Do a first pass if there are supposed to be passes at all
+  //First pass is special because getting the source buffer externally
   if(n_passes > 0){
 
+    // run the first compute pass blurs in x-axis
     glUseProgram(this->m_computeShaderPtrs[0]->GetProgram());
 
-    this->bindAndCompute(src_buffer, this->m_buffers[1], x, y);
+    // y = 0, x = 1 ------> dvides in y
+    this->bindAndCompute(src_buffer, this->m_buffers[1], y, x);
   }
 
+  //Rest can be done internally
   for (int i = 1; i < n; i++) {								                                  //Loop starts at 1 as the first pass has been done
 
-    glUseProgram(this->m_computeShaderPtrs[x]->GetProgram());                    //alternate between horizontal and vertical blurring
+    //alternate between horizontal and vertical blurring shaders
+    glUseProgram(this->m_computeShaderPtrs[x]->GetProgram());
 
-    this->bindAndCompute(this->m_buffers[x], this->m_buffers[y], y, x);	              //Send in alternating buffers
+    this->bindAndCompute(this->m_buffers[x], this->m_buffers[y], x, y);	              //Send in alternating buffers
 
     //Swap so x = 0 or 1
     //and y = 1 or 0

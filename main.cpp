@@ -21,7 +21,7 @@ const char* s_vs = "shaders/second_vs.glsl";
 const char* s_fs = "shaders/second_fs.glsl";
 
 
-#define NR_OF_COMPUTE_PASSES 1
+#define NR_OF_COMPUTE_PASSES 20
 
 int main() {
 
