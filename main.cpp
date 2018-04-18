@@ -116,6 +116,6 @@ int main() {
   }
   while(glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS && glfwWindowShouldClose(window) == 0);
 
-  //glDisableVertexAttribArray(0);  //NTS: ?
+  //glDisableVertexAttribArray(0);
   return 0;
 }

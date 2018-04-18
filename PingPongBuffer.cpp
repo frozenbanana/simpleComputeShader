@@ -23,7 +23,6 @@ void PingPongBuffer::createBuffer(GLuint buffer_id) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);	//Set wrapping to clamp to edge
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);	//Set wrapping to clamp to edge
 
-  //glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void PingPongBuffer::bindAndCompute(GLuint source_buffer, GLuint target_buffer, GLuint x, GLuint y) {
@@ -34,7 +33,7 @@ void PingPongBuffer::bindAndCompute(GLuint source_buffer, GLuint target_buffer, 
     GL_FALSE,
     0,
     GL_READ_ONLY,			  //Only read from this texture
-    GL_RGBA8 //GL_RGBA32F						//GL_RGB16F
+    GL_RGBA8           
   );
 
   glBindImageTexture(
@@ -44,7 +43,7 @@ void PingPongBuffer::bindAndCompute(GLuint source_buffer, GLuint target_buffer, 
     GL_FALSE,
     0,
     GL_WRITE_ONLY,			//Only write to this texture
-    GL_RGBA8 //GL_RGBA32F						//GL_RGB16F
+    GL_RGBA8 
   );
 
   // How many workgroups in x, y, z
@@ -95,7 +94,7 @@ void PingPongBuffer::DoPingPong(int n_passes, GLuint src_buffer) {
     //alternate between horizontal and vertical blurring shaders
     glUseProgram(this->m_computeShaderPtrs[x]->GetProgram());
 
-    this->bindAndCompute(this->m_buffers[x], this->m_buffers[y], x, y);	              //Send in alternating buffers
+    this->bindAndCompute(this->m_buffers[x], this->m_buffers[y], x, y);	        //Send in alternating buffers
 
     //Swap so x = 0 or 1
     //and y = 1 or 0
@@ -107,13 +106,4 @@ void PingPongBuffer::DoPingPong(int n_passes, GLuint src_buffer) {
 
 void PingPongBuffer::BindResult() {
   Bind2DTextureTo(this->m_buffers[0], COMP_TEX);
-  // glBindImageTexture(
-  //   COMP_TEX,        //Slot 1
-  //   this->m_buffers[0],
-  //   0,
-  //   GL_FALSE,
-  //   0,
-  //   GL_READ_WRITE,			  //Only read from this texture
-  //   GL_RGBA8						//GL_RGB16F
-  // );
 }

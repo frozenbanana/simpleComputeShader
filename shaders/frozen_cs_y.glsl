@@ -2,17 +2,17 @@
 #extension GL_ARB_compute_shader : enable
 #extension GL_ARB_shader_image_load_store : enable
 
-layout (rgba8, binding=0) uniform image2D texture_source0;						//Textures bound to 0 and 1 resp. that are used to
-layout (rgba8, binding=1) uniform image2D texture_target0;						//acquire texture and save changes made to texture
+layout (rgba8, binding=0) uniform image2D texture_source0;						// Textures bound to 0 and 1 resp. that are used to
+layout (rgba8, binding=1) uniform image2D texture_target0;						// Acquire texture and save changes made to texture
 
-layout (local_size_x=1, local_size_y=400) in;			//Local work-group size
+layout (local_size_x=1, local_size_y=400) in;			                    // Local work-group size
 
 shared vec4 pixelStrip[400];
 
-uniform float weight[5] = float[] (0.06136, 0.24477, 0.38774, 0.24477, 0.06136);		//Gaussian biggest in middle
+uniform float weight[5] = float[] (0.06136, 0.24477, 0.38774, 0.24477, 0.06136);		// Gaussian biggest in middle
 
 void main() {
-  ivec2 txlPos = ivec2(gl_GlobalInvocationID.xy);		//Get txl-pos
+  ivec2 txlPos = ivec2(gl_GlobalInvocationID.xy);		                  // Get txl-pos
 
   // Store color result in pixelStrip
   // Index is the local position of workgroup in y-axis
@@ -32,5 +32,5 @@ void main() {
     result += pixelStrip[currentSample] * weight[i+2];
   }
 
-  imageStore(texture_target0, txlPos, result);			//Save color in target texture
+  imageStore(texture_target0, txlPos, result);			                  // Save color in target texture
 }
